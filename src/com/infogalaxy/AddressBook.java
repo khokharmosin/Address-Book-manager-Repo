@@ -1,5 +1,10 @@
 package com.infogalaxy;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -85,7 +90,6 @@ public class AddressBook {
 
     public void deleteContact() {
         Scanner sc = new Scanner(System.in);
-
         System.out.println("Enter The Delete Name : ");
         String delete = sc.next();
         for (int i = 0; i < contactlist.size(); i++) {
@@ -96,13 +100,31 @@ public class AddressBook {
         }
     }
 
+    public void backupToFile() {
+        String contactData = null;
+        for (int i = 0; i < contactlist.size(); i++) {
+            Contact contact = contactlist.get(i);
+            contactData = contact.getFirstName() + "," + contact.getLastName() + "," + contact.getAddress() + "," + contact.getCity() + ","
+                    + contact.getState() + "," + contact.getMobno() + "," + contact.getEmail() + "," + contact.getZipCode() + ","
+                    + "\n" + contactData;
+        }
+        Path file = Paths.get("MyData.txt");
+        byte[] filedata = contactData.getBytes();
+        try {
+            Files.write(file, filedata);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         AddressBook addressBook = new AddressBook();
         int choice;
         do {
             System.out.println("***ADDRESS BOOK MANAGER***");
-            System.out.println("\n1. ADD CONTACT \n2. DISPLAY CONTACT \n3. EDIT CONTACT \n4. SERACH STATE \n5. DELETE CONTACT \n6. EXIT");
+            System.out.println("\n1. ADD CONTACT \n2. DISPLAY CONTACT \n3. EDIT CONTACT \n4. SERACH STATE \n5. DELETE CONTACT" +
+                    "\n6. BAKE TO FILE  \n7. EXIT");
             System.out.println("Enter Your Choice :");
             choice = sc.nextInt();
             switch (choice) {
@@ -121,7 +143,10 @@ public class AddressBook {
                 case 5:
                     addressBook.deleteContact();
                     break;
+                case 6:
+                    addressBook.backupToFile();
+                    break;
             }
-        } while (choice != 6);
+        } while (choice != 7);
     }
 }
