@@ -1,7 +1,9 @@
 package com.infogalaxy;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -104,14 +106,35 @@ public class AddressBook {
         String contactData = null;
         for (int i = 0; i < contactlist.size(); i++) {
             Contact contact = contactlist.get(i);
-            contactData = contact.getFirstName() + "," + contact.getLastName() + "," + contact.getAddress() + "," + contact.getCity() + ","
-                    + contact.getState() + "," + contact.getMobno() + "," + contact.getEmail() + "," + contact.getZipCode() + ","
-                    + "\n" + contactData;
+            contactData = contact.getFirstName() + "," + contact.getLastName() + "," + contact.getAddress() + "," + contact.getCity() + "," + contact.getState() + "," + contact.getMobno() + "," + contact.getEmail() + "," + contact.getZipCode() + "," + "\n" + contactData;
         }
         Path file = Paths.get("MyData.txt");
         byte[] filedata = contactData.getBytes();
         try {
             Files.write(file, filedata);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void restoreFromeFile() {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("MyData.txt"));
+            String data;
+            while ((data = bufferedReader.readLine()) != null && !data.equalsIgnoreCase("null")) {
+                String[] sepaaretData = data.split(",");
+                Contact contact = new Contact();
+                contact.setFirstName(sepaaretData[0]);
+                contact.setLastName(sepaaretData[1]);
+                contact.setAddress(sepaaretData[2]);
+                contact.setCity(sepaaretData[3]);
+                contact.setState(sepaaretData[4]);
+                contact.setMobno(sepaaretData[5]);
+                contact.setEmail(sepaaretData[6]);
+                contact.setZipCode(sepaaretData[7]);
+                contactlist.add(contact);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,8 +146,7 @@ public class AddressBook {
         int choice;
         do {
             System.out.println("***ADDRESS BOOK MANAGER***");
-            System.out.println("\n1. ADD CONTACT \n2. DISPLAY CONTACT \n3. EDIT CONTACT \n4. SERACH STATE \n5. DELETE CONTACT" +
-                    "\n6. BAKE TO FILE  \n7. EXIT");
+            System.out.println("\n1. ADD CONTACT \n2. DISPLAY CONTACT \n3. EDIT CONTACT \n4. SEARCH STATE \n5. DELETE CONTACT" + "\n6. BAKE TO FILE  \n7. RESTORE FROM FILE \n8.EXIT");
             System.out.println("Enter Your Choice :");
             choice = sc.nextInt();
             switch (choice) {
@@ -146,7 +168,10 @@ public class AddressBook {
                 case 6:
                     addressBook.backupToFile();
                     break;
+                case 7:
+                    addressBook.restoreFromeFile();
+                    break;
             }
-        } while (choice != 7);
+        } while (choice != 8);
     }
 }

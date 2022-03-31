@@ -1,3 +1,2 @@
-mayur,more,pingana,shahada,MH,765431357,mayur@gmail.com,34567,
-mosin,khokhar,kgn,shahada,MH,89076467788,mosin@gmail.com,1234,
+mayur,more,pinngana,shahada,Mh,789087545,mayur@gmail.com,3456,
 null
